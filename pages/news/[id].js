@@ -4,6 +4,7 @@ import Root from "@/core/Root";
 import checkLanguage from '@/miscs/checkLanguage';
 import decrease from "@/components/miscs/decrease";
 import minimize from "@/components/miscs/minimize";
+import Axios from "axios";
 
 const Blog = ({news, other}) => {
     console.log(news,'news');
@@ -22,6 +23,7 @@ export default Blog;
 export async function getServerSideProps({params, req}){
 
     let data = await checkLanguage(`/posts?Slug=${params.id}`, req, true);
+    await Axios.post(process.env.serverUrl+'/posts/addCount/'+data.data[0].id, {id: data.data[0].id});
     let other = await checkLanguage('/posts', req, true);
     return {props: {news: data.data[0], other: other.data}}
 
